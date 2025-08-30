@@ -1,9 +1,11 @@
 // api/chat.js
+
+// ✅ runtime config simplified (no "nodejs20.x")
 export const config = {
   runtime: 'nodejs'
 };
 
-const MODEL = 'gemini-2.0-flash'; // fast & cheap; good default
+const MODEL = 'gemini-1.5-flash-latest'; // fast & cheap
 const TIMEOUT_MS = 20000;
 
 export default async function handler(req, res) {
@@ -44,7 +46,6 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify(body)
     }).catch((e) => {
-      // fetch throws on abort; normalize it
       if (e.name === 'AbortError') throw new Error('Upstream timeout');
       throw e;
     });
@@ -56,8 +57,6 @@ export default async function handler(req, res) {
     }
 
     const data = await r.json();
-
-    // Gemini REST response shape: candidates[0].content.parts[].text
     const answer =
       data?.candidates?.[0]?.content?.parts?.map((p) => p?.text).join('') ??
       '(No response text)';
