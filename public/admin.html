@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Admin - Add Document</title>
 
-  <!-- Load pdf.js -->
+  <!-- Load pdf.js and its worker -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
   <script>
+    // Tell pdf.js where the worker lives
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   </script>
@@ -37,73 +38,4 @@
     <button id="send">Insert into Supabase</button>
     <span id="status"></span>
 
-    <div class="out" id="out"></div>
-  </div>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-    const docText = $('docText'), pdfFile = $('pdfFile'), out = $('out'), send = $('send'), status = $('status');
-
-    // Extract text from PDF
-    pdfFile.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      status.textContent = 'Reading PDF...';
-      const text = await extractPdfText(file);
-      if (text.length > 5000) {
-        docText.value = text.slice(0, 5000) + "\n...(truncated)...";
-      } else {
-        docText.value = text;
-      }
-      status.textContent = text ? 'PDF loaded into text area.' : 'Failed to read PDF.';
-    });
-
-    async function extractPdfText(file) {
-      try {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let text = '';
-        for (let i = 1; i <= pdf.numPages; i++) {
-          const page = await pdf.getPage(i);
-          const content = await page.getTextContent();
-          const strings = content.items.map(item => item.str);
-          text += strings.join(' ') + '\n';
-        }
-        return text;
-      } catch (err) {
-        console.error('PDF parse error:', err);
-        return '';
-      }
-    }
-
-    // Insert into Supabase via your API
-    send.addEventListener('click', async () => {
-      const content = docText.value.trim();
-      if (!content) {
-        out.textContent = '❌ Please enter some text or upload a PDF.';
-        return;
-      }
-
-      send.disabled = true;
-      status.textContent = 'Sending...';
-      out.textContent = '';
-
-      try {
-        const r = await fetch('/api/add-doc', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content })
-        });
-        const data = await r.json();
-        if (!r.ok) throw new Error(data?.error || 'Request failed');
-        out.textContent = '✅ Document inserted:\n' + JSON.stringify(data.inserted, null, 2);
-      } catch (err) {
-        out.textContent = 'Error: ' + err.message;
-      } finally {
-        send.disabled = false;
-        status.textContent = '';
-      }
-    });
-  </script>
-</body>
-</html>
+    <div cl
