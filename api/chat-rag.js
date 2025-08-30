@@ -5,6 +5,11 @@ const GEMINI_MODEL = 'gemini-2.0-flash';
 const EMBEDDING_MODEL = 'embedding-001';
 
 export default async function handler(req, res) {
+  // 🔐 Password check
+  if (req.headers['x-api-pass'] !== process.env.CHAT_RAG_PASSWORD) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  
   try {
     if (req.method !== 'POST') {
       res.setHeader('Allow', 'POST');
