@@ -33,6 +33,9 @@
   </div>
 
   <script>
+    // 🔐 Ask the user for password once when the page loads
+    let userPass = prompt("Enter password to access chat:");
+    
     const $ = (id) => document.getElementById(id);
     const askBtn = $('ask'), msg = $('msg'), out = $('out'), ctx = $('ctx'), status = $('status');
 
@@ -51,7 +54,7 @@
       try {
         const r = await fetch('/api/chat-rag', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-api-pass': userPass},
           body: JSON.stringify({ message })
         });
         const data = await r.json();
