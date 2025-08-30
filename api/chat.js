@@ -1,6 +1,6 @@
 // api/chat.js
 export const config = {
-  runtime: 'nodejs20.x'
+  runtime: 'nodejs'
 };
 
 const MODEL = 'gemini-2.0-flash'; // fast & cheap; good default
