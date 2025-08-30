@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Admin - Add Document</title>
+  <title>CRE Investor - Add Document to Knowledge Base</title>
 
   <!-- Load pdf.js and its worker -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -26,7 +26,7 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>📚 Admin - Add Document to Supabase</h1>
+    <h1>CRE Investor - Add Document to Knowledge Base</h1>
 
     <label for="docText">Paste text (or extracted from PDF)</label>
     <textarea id="docText" placeholder="Paste or type your text here..."></textarea>
@@ -34,13 +34,16 @@
     <label for="pdfFile">Or upload a PDF</label>
     <input type="file" id="pdfFile" accept="application/pdf"/>
 
-    <button id="send">Insert into Supabase</button>
+    <button id="send">Insert into Knowledge Base</button>
     <span id="status"></span>
 
     <div class="out" id="out"></div>
   </div>
 
   <script>
+
+    let userPass = prompt("Enter admin password:");
+
     const $ = (id) => document.getElementById(id);
     const docText = $('docText'), pdfFile = $('pdfFile'), out = $('out'), send = $('send'), status = $('status');
 
@@ -96,7 +99,7 @@
       try {
         const r = await fetch('/api/add-doc', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-api-pass': userPass},
           body: JSON.stringify({ content })
         });
         const data = await r.json();
