@@ -59,7 +59,7 @@
 
         out.textContent = 'Answer:\n\n' + data.reply;
         if (data.matches?.length) {
-          ctx.textContent = '📚 Context used:\n' + data.matches.map(
+          ctx.textContent = 'Context used:\n' + data.matches.map(
             m => `- (score ${m.similarity?.toFixed(2)}) ${m.content.slice(0,100)}...`
           ).join('\n');
         }
