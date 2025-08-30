@@ -82,6 +82,7 @@
 
     // Insert text into Supabase via API
     send.addEventListener('click', async () => {
+      console.log("✅ Button clicked, sending to /api/add-doc...");
       const content = docText.value.trim();
       if (!content) {
         out.textContent = '❌ Please enter some text or upload a PDF.';
