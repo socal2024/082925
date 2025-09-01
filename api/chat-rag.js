@@ -1,7 +1,7 @@
 // api/chat-rag.js
 export const config = { runtime: 'nodejs' };
 
-const GEMINI_MODEL = 'gemini-2.5-pro';
+const GEMINI_MODEL = 'gemini-2.5-flash';
 const EMBEDDING_MODEL = 'embedding-001';
 
 export default async function handler(req, res) {
