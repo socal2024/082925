@@ -52,14 +52,14 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         query_embedding: queryEmbedding,
-        match_count: 3
+        match_count: 10
       })
     });
     const matches = await searchResp.json();
     const context = matches.map(m => m.content).join("\n\n");
 
     // Step 3: Build RAG prompt
-    const ragPrompt = `You are an expert commercial real estate investor with expertise in multifamily and light industrial properties, including development, investment purchases, and acting as an LP in syndications.  You advise other commercial real estate investors based on your knowledge and the context provided. If no context is provided, answer based on your existing knowledge.
+    const ragPrompt = `You are an expert commercial real estate investor with expertise in multifamily and light industrial properties, including development, investment purchases, and acting as an LP in syndications.  You advise other commercial real estate investors based on your knowledge and the context provided. If no context is provided, answer based on your existing knowledge.  Your answers are detailed, providing all the data and analysis commercial real estate investors expect, while also being concise.
 
 Context:
 ${context}
